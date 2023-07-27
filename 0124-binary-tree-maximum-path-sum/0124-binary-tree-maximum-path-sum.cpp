@@ -11,6 +11,7 @@
  */
 class Solution {
 public:
+    //pathsum function
     int ps(TreeNode* root,int &maxi){
         if(root==NULL)
             return 0;
