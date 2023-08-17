@@ -1,35 +1,27 @@
 class Solution {
 public:
     vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
-        vector<vector<int>>dir = {{-1,0},{1,0},{0,1},{0,-1}};
-        queue<vector<int>>q;
+        //dp solution
         int n = mat.size();
         int m = mat[0].size();
-        vector<vector<int>>ans(n,vector<int>(m,0));
         for(int i=0;i<n;i++){
             for(int j=0;j<m;j++){
-                if(mat[i][j]==0){
-                    q.push({i,j,0});
-                    mat[i][j]=-1;
-                }
+                if(mat[i][j]==0) continue;
+                int top=1e8, left = 1e8;
+                if(i>0) top = mat[i-1][j];
+                if(j>0) left = mat[i][j-1];
+                mat[i][j] = min(top,left)+1;
             }
         }
-        while(!q.empty()){
-            auto temp = q.front();
-            q.pop();
-            int row = temp[0];
-            int col = temp[1];
-            int dist = temp[2];
-            for(int i=0;i<4;i++){
-                int r = row + dir[i][0];
-                int c = col + dir[i][1];
-                if(r<n && r>=0 && c<m && c>=0 && mat[r][c]!=-1){
-                    ans[r][c] = dist+1;
-                    q.push({r,c,dist+1});
-                    mat[r][c]=-1;
-                }
+        for(int i=n-1;i>=0;i--){
+            for(int j=m-1;j>=0;j--){
+                if(mat[i][j]==0) continue;
+                int bottom=1e8, right = 1e8;
+                if(i<n-1) bottom = mat[i+1][j];
+                if(j<m-1) right = mat[i][j+1];
+                mat[i][j] = min(mat[i][j],(min(bottom,right)+1));
             }
         }
-        return ans;
+        return mat;
     }
 };
