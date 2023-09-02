@@ -16,9 +16,26 @@ public:
         return dp[ind] = min(take,nt);
 
     }
+    // int minExtraChar(string s, vector<string>& dict) {
+    //     unordered_set<string>st(dict.begin(),dict.end());
+    //     vector<int>dp(s.size()+1,-1);
+    //     return f(s,st,0,dp);
+    // }
+
     int minExtraChar(string s, vector<string>& dict) {
         unordered_set<string>st(dict.begin(),dict.end());
-        vector<int>dp(s.size()+1,-1);
-        return f(s,st,0,dp);
+        vector<int>dp(s.size()+1,0);
+        int n = s.size();
+        for(int i=1;i<=n;i++){
+            int nottake = 1+dp[i-1];
+            int take =1e8;
+            for(int j=0;j<i;j++){
+                if(st.find(s.substr(j,i-j))!=st.end()){
+                    take = min(take,dp[j]);
+                }
+            }
+            dp[i] = min(take,nottake);
+        }
+        return dp[n];
     }
 };
